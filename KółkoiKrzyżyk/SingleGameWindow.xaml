@@ -1,0 +1,58 @@
+﻿<Window x:Class="KółkoiKrzyżyk.SingleGameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KółkoiKrzyżyk"
+        mc:Ignorable="d"
+        Title="KółkoiKrzyżyk - Gra lokalna" Height="405" Width="400" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontSize" Value="80" />
+
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <Grid x:Name="Topsite">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Label x:Name="label1" Content="X Turn" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" />
+            <Label x:Name="labelP1" Content="X Score: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" />
+            <Label x:Name="labelP2" Content="O Score: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" />
+            <Button x:Name="NewGameButton" FontSize="12" Content="Nowa gra" BorderThickness="1" Grid.Column="0" Click="NewGameButton_Click" />
+            <Button x:Name="NextRoundButton" FontSize="12" Content="Następna runda" BorderThickness="1" Grid.Column="4" Click="NextRoundButton_Click"/>
+        </Grid>
+        <Grid x:Name="Container">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Button x:Name="B11" Click="Button_Click" Grid.Column="0" Grid.Row="0" Content="X" />
+            <Button x:Name="B21" Click="Button_Click" Grid.Column="0" Grid.Row="1" Content="X" />
+            <Button x:Name="B31" Click="Button_Click" Grid.Column="0" Grid.Row="2" Content="X" />
+            <Button x:Name="B12" Click="Button_Click" Grid.Column="1" Grid.Row="0" Content="X" />
+            <Button x:Name="B22" Click="Button_Click" Grid.Column="1" Grid.Row="1" Content="X" />
+            <Button x:Name="B32" Click="Button_Click" Grid.Column="1" Grid.Row="2" Content="X" />
+            <Button x:Name="B13" Click="Button_Click" Grid.Column="2" Grid.Row="0" Content="X" />
+            <Button x:Name="B23" Click="Button_Click" Grid.Column="2" Grid.Row="1" Content="X" />
+            <Button x:Name="B33" Click="Button_Click" Grid.Column="2" Grid.Row="2" Content="X" />
+
+        </Grid>
+    </StackPanel>
+</Window>

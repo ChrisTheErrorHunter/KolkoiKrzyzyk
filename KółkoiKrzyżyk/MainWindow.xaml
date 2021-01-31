@@ -1,0 +1,28 @@
+﻿<Window x:Class="KółkoiKrzyżyk.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KółkoiKrzyżyk"
+        mc:Ignorable="d"
+        Title="Kółko i Krzyżyk - Menu" Height="400" Width="400" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="LocalGameButton" Content="Gra lokalna" FontSize="20" Grid.Row="1" Grid.ColumnSpan="2" Click="LocalGameButton_Click"/>
+        <Button x:Name="HostGameButton" Content="Hostuj Nową Grę" FontSize="20" Grid.Row="4" Grid.ColumnSpan="2" Click="HostGameButton_Click"/>
+        <Button x:Name="JoinGameButton" Content="Dołącz" FontSize="20" Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Click="JoinGameButton_Click"/>
+        <TextBox x:Name="IPBOX" Grid.Row="3" Background="LightGray"/>
+        <Label x:Name="IPINFOLABEL" Background="LightGray" Grid.Row="2" Content="Wprowadź IPv4 przeciwnika w formie xxx.xxx.xxx.xxx" />
+        <Label x:Name="TittleLabel" Content="Kółko i Krzyzyk" FontSize="25" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Window>
