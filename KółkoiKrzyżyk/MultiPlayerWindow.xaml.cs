@@ -110,14 +110,14 @@ namespace KółkoiKrzyżyk
                 byte[] buffer = BitConverter.GetBytes(index);
                 socket.Send(buffer);
                 server.Stop();
-                Close();
+                System.Environment.Exit(0);
             }
             else
             {
                 byte[] buffer = BitConverter.GetBytes(index);
                 socket.Send(buffer);
                 client.Close();
-                Close();
+                System.Environment.Exit(0);
             }
         }
         private void NextRoundButton_Click(object sender, RoutedEventArgs e)
@@ -316,14 +316,14 @@ namespace KółkoiKrzyżyk
                 {
                     MessageBox.Show("Przeciwnik rozłączył się!");
                     server.Stop();
-                    RunByDispatcher(Close);
+                    System.Environment.Exit(0);
                     return;
                 }
                 else
                 {
                     MessageBox.Show("Przeciwnik rozłączył się!");
                     client.Close();
-                    RunByDispatcher(Close);
+                    System.Environment.Exit(0);
                     return;
                 }
             }
