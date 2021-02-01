@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KółkoiKrzyżyk"
         mc:Ignorable="d"
-        Title="KółkoiKrzyżyk - Gra Online" Height="405" Width="400" ResizeMode="NoResize">
+        Title="KółkoiKrzyżyk - Gra Online" Height="470" Width="400" ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="BorderThickness" Value="1" />
@@ -18,7 +18,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
@@ -26,10 +26,9 @@
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Label x:Name="label1" Content="X Turn" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" />
-            <Label x:Name="labelP1" Content="X Score: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" />
-            <Label x:Name="labelP2" Content="O Score: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" />
-            <Button x:Name="NewGameButton" FontSize="12" Content="Nowa gra" BorderThickness="1" Grid.Column="0" Click="NewGameButton_Click" />
-            <Button x:Name="NextRoundButton" FontSize="12" Content="Następna runda" BorderThickness="1" Grid.Column="4" Click="NextRoundButton_Click"/>
+            <Label x:Name="labelP1" Content="X Score: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" />
+            <Label x:Name="labelP2" Content="O Score: 0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4" />
+            
         </Grid>
         <Grid x:Name="Container">
             <Grid.ColumnDefinitions>
@@ -53,6 +52,21 @@
             <Button x:Name="B23" Click="Button_Click" Grid.Column="2" Grid.Row="1" Content="X" />
             <Button x:Name="B33" Click="Button_Click" Grid.Column="2" Grid.Row="2" Content="X" />
 
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button x:Name="NewGameButton" FontSize="12" Content="Nowa gra" BorderThickness="1" Grid.Column="0" Grid.RowSpan="2" Click="NewGameButton_Click" />
+            <Button x:Name="DisconnetButton" FontSize="12" Content="Rozłącz" BorderThickness="1" Grid.Column="1" Grid.Row="1" Click="DisconnetButton_Click"/>
+            <Button x:Name="NextRoundButton" FontSize="12" Content="Następna runda" BorderThickness="1" Grid.Column="2" Grid.RowSpan="2" Click="NextRoundButton_Click"/>
+            <Label x:Name="TurnLabel" Content="Player" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" />
         </Grid>
     </StackPanel>
 </Window>

@@ -20,7 +20,7 @@ namespace KółkoiKrzyżyk
     public partial class MultiPlayerWindow : Window
     {
         private Socket socket;
-        int synctest;
+        bool ifisHost;
         //private BackgroundWorker moveReciver = new BackgroundWorker();
         private TcpListener server = null;
         private TcpClient client;
@@ -31,6 +31,7 @@ namespace KółkoiKrzyżyk
         private StanyKafelka playerSign, oponnentSign;
         public MultiPlayerWindow(bool isHost, string IPv4)
         {
+            ifisHost = isHost;
             InitializeComponent();
             //moveReciver.DoWork += MoveReciver_DoWork;
             if (isHost)
@@ -40,14 +41,12 @@ namespace KółkoiKrzyżyk
                 socket = server.AcceptSocket();
                 playerSign = StanyKafelka.O;
                 oponnentSign = StanyKafelka.X;
-                tura = false;
                 turabegin = false;
             }
             else
             {
                 playerSign = StanyKafelka.X;
                 oponnentSign = StanyKafelka.O;
-                tura = true;
                 turabegin = true;
                 try
                 {
@@ -61,7 +60,6 @@ namespace KółkoiKrzyżyk
                     Close();
                 }
             }
-            MessageBox.Show("You are " + playerSign);
             new Thread(() =>
             {
                 while (true)
@@ -69,8 +67,8 @@ namespace KółkoiKrzyżyk
                     ReciveMove();
                 }
             }).Start();
+            label1.Content = "You are " + playerSign;
             NewGame();
-
         }
 
 
@@ -88,7 +86,7 @@ namespace KółkoiKrzyżyk
             stanyKafelka = new StanyKafelka[9];
             for (var i = 0; i < stanyKafelka.Length; i++) stanyKafelka[i] = StanyKafelka.Blank;
             //Ustawienie tury na gracza 1
-            //tura = turabegin;
+            tura = turabegin;
             numerTury = 0;
             //czyszczenie guzików
             Container.Children.Cast<Button>().ToList().ForEach(button =>
@@ -98,21 +96,47 @@ namespace KółkoiKrzyżyk
             });
             //Otwarcie gameOver
             gameOver = false;
-            // if (tura) label1.Content = "X TURN!";
-            // else label1.Content = "O TURN!";
-        }
+            NewGameButton.IsEnabled = false;
+            NextRoundButton.IsEnabled = false;
+            if(tura) TurnLabel.Content = playerSign + " Turn";
+            else TurnLabel.Content = oponnentSign + " Turn";
 
+        }
+        private void DisconnetButton_Click(object sender, RoutedEventArgs e)
+        {
+            var index = 10;
+            if (ifisHost)
+            {
+                byte[] buffer = BitConverter.GetBytes(index);
+                socket.Send(buffer);
+                server.Stop();
+                Close();
+            }
+            else
+            {
+                byte[] buffer = BitConverter.GetBytes(index);
+                socket.Send(buffer);
+                client.Close();
+                Close();
+            }
+        }
         private void NextRoundButton_Click(object sender, RoutedEventArgs e)
         {
+            var index = 11;
+            byte[] buffer = BitConverter.GetBytes(index);
+            socket.Send(buffer);
             NewGame();
         }
 
         private void NewGameButton_Click(object sender, RoutedEventArgs e)
         {
+            
+            var index = 12;
+            byte[] buffer = BitConverter.GetBytes(index);
+            socket.Send(buffer);
             P1Score = 0;
             P2Score = 0;
             labelP1.Content = "X Score: 0";
-            labelP2.Content = "O Score: 0";
             NewGame();
         }
 
@@ -122,24 +146,25 @@ namespace KółkoiKrzyżyk
             {
                 P1Score++;
                 labelP1.Content = "X Score: " + P1Score;
-                label1.Content = "X WINS!";
+                TurnLabel.Content = "X WINS!";
             }
             else
             {
                 P2Score++;
                 labelP2.Content = "O Score: " + P2Score;
-                label1.Content = "O WINS!";
+                TurnLabel.Content = "O WINS!";
             }
         }
 
         private void EndGame()
         {
-            //Horizontal
             if (numerTury > 8)
             {
-                label1.Content = "DRAW!";
+                TurnLabel.Content = "DRAW!";
                 gameOver = true;
                 turabegin = !turabegin;
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[0] != StanyKafelka.Blank && (stanyKafelka[0] & stanyKafelka[1] & stanyKafelka[2]) == stanyKafelka[0])
@@ -148,6 +173,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(0);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[3] != StanyKafelka.Blank && (stanyKafelka[3] & stanyKafelka[4] & stanyKafelka[5]) == stanyKafelka[3])
@@ -156,6 +183,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(3);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[6] != StanyKafelka.Blank && (stanyKafelka[6] & stanyKafelka[7] & stanyKafelka[8]) == stanyKafelka[6])
@@ -164,6 +193,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(6);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[0] != StanyKafelka.Blank && (stanyKafelka[0] & stanyKafelka[3] & stanyKafelka[6]) == stanyKafelka[0])
@@ -172,6 +203,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(0);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[1] != StanyKafelka.Blank && (stanyKafelka[1] & stanyKafelka[4] & stanyKafelka[7]) == stanyKafelka[1])
@@ -180,6 +213,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(1);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[2] != StanyKafelka.Blank && (stanyKafelka[2] & stanyKafelka[5] & stanyKafelka[8]) == stanyKafelka[2])
@@ -188,6 +223,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(2);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[0] != StanyKafelka.Blank && (stanyKafelka[0] & stanyKafelka[4] & stanyKafelka[8]) == stanyKafelka[0])
@@ -196,6 +233,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(0);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
             if (stanyKafelka[2] != StanyKafelka.Blank && (stanyKafelka[2] & stanyKafelka[4] & stanyKafelka[6]) == stanyKafelka[2])
@@ -204,6 +243,8 @@ namespace KółkoiKrzyżyk
                 gameOver = true;
                 turabegin = !turabegin;
                 ScoreUpdate(2);
+                NewGameButton.IsEnabled = true;
+                NextRoundButton.IsEnabled = true;
                 return;
             }
         }
@@ -223,7 +264,7 @@ namespace KółkoiKrzyżyk
             //moveReciver.RunWorkerAsync();
             //zmiana tury gracza i gry raz dwa trzy
             tura = !tura;
-            label1.Content = oponnentSign + " Turn";
+            TurnLabel.Content = oponnentSign + " Turn";
             numerTury++;
             EndGame();
 
@@ -245,32 +286,21 @@ namespace KółkoiKrzyżyk
             //});
         }
 
-        private void TilesUpdateDisp()
-        {
-            ThreadStart metoda = new ThreadStart(TilesUpdate);
-            this.Dispatcher.BeginInvoke(metoda);
-        }
-
-        private void EndGameDisp()
-        {
-            ThreadStart metoda = new ThreadStart(EndGame);
-            this.Dispatcher.BeginInvoke(metoda);
-        }
-
-        private void newf()
-        {
-
-        }
-
         private void ChLabel1()
         {
-            if (tura) label1.Content = playerSign + " Turn";
-            else label1.Content = playerSign + " Turn";
+            if (tura) TurnLabel.Content = playerSign + " Turn";
+            else TurnLabel.Content = playerSign + " Turn";
+        }
+        
+        private void ChPScoreLabels()
+        {
+            labelP1.Content = "X Score: 0";
+            labelP2.Content = "O Score: 0";
         }
 
-        private void ChLabel1Disp()
+        private void RunByDispatcher(Action methodeName)
         {
-            ThreadStart metoda = new ThreadStart(ChLabel1);
+            ThreadStart metoda = new ThreadStart(methodeName);
             this.Dispatcher.BeginInvoke(metoda);
         }
 
@@ -280,12 +310,42 @@ namespace KółkoiKrzyżyk
             socket.Receive(buffer);
             int index;
             index = BitConverter.ToInt32(buffer, 0);
+            if(index == 10)
+            {
+                if (ifisHost)
+                {
+                    MessageBox.Show("Przeciwnik rozłączył się!");
+                    server.Stop();
+                    RunByDispatcher(Close);
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("Przeciwnik rozłączył się!");
+                    client.Close();
+                    RunByDispatcher(Close);
+                    return;
+                }
+            }
+            if(index == 11)
+            {
+                RunByDispatcher(NewGame);
+                return;
+            }
+            if (index == 12)
+            {
+                P1Score = 0;
+                P2Score = 0;
+                RunByDispatcher(ChPScoreLabels);
+                RunByDispatcher(NewGame);
+                return;
+            }
             stanyKafelka[index] = oponnentSign;
-            TilesUpdateDisp();
+            RunByDispatcher(TilesUpdate);
             numerTury++;
             tura = !tura;
-            ChLabel1Disp();
-            EndGameDisp();
+            RunByDispatcher(ChLabel1);
+            RunByDispatcher(EndGame);
         }
     }
 }
